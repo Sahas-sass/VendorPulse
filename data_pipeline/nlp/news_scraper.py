@@ -59,31 +59,35 @@ class ColomboNewsScraper:
         """
         results = []
 
-        # 1. Attempt Live RSS Fetching
-        for feed in RSS_FEEDS:
-            try:
-                resp = requests.get(feed["url"], timeout=4, headers={"User-Agent": "VendorPulse-Bot/1.0"})
-                if resp.status_code == 200:
-                    root = ET.fromstring(resp.content)
-                    items = root.findall(".//item")
-                    for item in items[:8]:
-                        title = item.findtext("title") or ""
-                        desc = item.findtext("description") or ""
-                        pub_date = item.findtext("pubDate") or "Live"
-                        
-                        # Run NLP extraction to see if it pertains to Colombo commercial zones
-                        extracted = self.extractor.extract_from_text(title, desc)
-                        if extracted["detected_categories"]:
-                            results.append({
-                                "source": feed["source"],
-                                "headline": title,
-                                "summary": desc[:200],
-                                "published_at": pub_date,
-                                "nlp_data": extracted
-                            })
-            except Exception:
-                # Expected when offline or under firewall; proceed gracefully
-                pass
+        # Fast bypass during test or offline mode
+        skip_rss = os.getenv("TESTING", "").lower() in ["1", "true", "yes"]
+
+        # 1. Attempt Live RSS Fetching (only if not in test mode)
+        if not skip_rss:
+            for feed in RSS_FEEDS:
+                try:
+                    resp = requests.get(feed["url"], timeout=1.5, headers={"User-Agent": "VendorPulse-Bot/1.0"})
+                    if resp.status_code == 200:
+                        root = ET.fromstring(resp.content)
+                        items = root.findall(".//item")
+                        for item in items[:8]:
+                            title = item.findtext("title") or ""
+                            desc = item.findtext("description") or ""
+                            pub_date = item.findtext("pubDate") or "Live"
+                            
+                            # Run NLP extraction to see if it pertains to Colombo commercial zones
+                            extracted = self.extractor.extract_from_text(title, desc)
+                            if extracted["detected_categories"]:
+                                results.append({
+                                    "source": feed["source"],
+                                    "headline": title,
+                                    "summary": desc[:200],
+                                    "published_at": pub_date,
+                                    "nlp_data": extracted
+                                })
+                except Exception:
+                    # Expected when offline or under firewall; proceed gracefully
+                    pass
 
         # 2. Enrich with Ground-Truth Colombo Validation Incidents
         for report in VALIDATION_DISRUPTION_REPORTS:
