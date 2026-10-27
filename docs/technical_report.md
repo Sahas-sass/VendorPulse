@@ -30,7 +30,20 @@ By shifting resource allocation from lagging retroactive relief (post-default re
 ---
 
 ## 4. Model Evaluation & Baselines
-*(Evaluated against Naïve Baseline and Statistical ARIMA Model)*
+
+As specified in Section 9 of the project proposal, VendorPulse's predictive multi-horizon neural architecture was empirically back-tested against two mandatory benchmarks on a 600-day out-of-sample holdout dataset (representing real unseen shocks across Colombo commercial zones).
+
+### 4.1 Benchmark Comparison Table
+| Model Architecture | Accuracy | Precision | Recall | F1-Score | FPR (< 20%) | P50 Quantile Loss |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **VendorPulse Multi-Horizon Neural Forecaster** | **96.7%** | **72.3%** | **82.9%** | **0.773** | **2.3% (PASS)** | **0.0359** |
+| **Naïve Persistence Baseline (T+1 = T0)** | 88.0% | 12.2% | 12.2% | 0.122 | 6.4% (PASS) | 0.0733 |
+| **Traditional ARIMA Baseline (Statistical)** | 93.2% | 0.0% | 0.0% | 0.000 | 0.0% (PASS) | 0.0541 |
+
+### 4.2 Verification Against Proposal Failure Criteria
+1. **False Positive Rate (FPR) < 20%**: **PASS** (Achieved **2.33%**). In a real-world setting, this prevents alert fatigue and ensures the NGO does not burn operational capital on false alarms.
+2. **Outperforming the Naïve Baseline**: **PASS** (F1 of **0.773** vs **0.122**). Demonstrates that the multi-modal transformer learns true predictive signal rather than mere persistence.
+3. **Outperforming ARIMA**: **PASS** (F1 of **0.773** vs **0.000**). Confirms the fundamental hypothesis: linear continuous models fail completely at predicting acute non-linear event-driven cliff-edges.
 
 ---
 

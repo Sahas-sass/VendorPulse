@@ -80,7 +80,7 @@ class VendorPulseRiskEngine:
         """Loads pretrained weights or quickly trains on historical Colombo data."""
         if os.path.exists(MODEL_SAVE_PATH):
             try:
-                self.model.load_state_dict(torch.load(MODEL_SAVE_PATH, map_location=self.device))
+                self.model.load_state_dict(torch.load(MODEL_SAVE_PATH, map_location=self.device, weights_only=True))
                 self.model.eval()
                 self.is_trained = True
                 return

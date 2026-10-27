@@ -1,0 +1,32 @@
+[
+  {
+    "model_name": "VendorPulse Multi-Horizon Neural Forecaster",
+    "accuracy": 0.9667,
+    "precision": 0.7234,
+    "recall": 0.8293,
+    "f1_score": 0.7727,
+    "false_positive_rate": 0.0233,
+    "p50_quantile_loss": 0.0359,
+    "p90_quantile_loss": 0.0191
+  },
+  {
+    "model_name": "Na\u00efve Persistence Baseline (T+1 = T0)",
+    "accuracy": 0.88,
+    "precision": 0.122,
+    "recall": 0.122,
+    "f1_score": 0.122,
+    "false_positive_rate": 0.0644,
+    "p50_quantile_loss": 0.0733,
+    "p90_quantile_loss": 0.0729
+  },
+  {
+    "model_name": "Traditional ARIMA Baseline (Statistical)",
+    "accuracy": 0.9317,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1_score": 0.0,
+    "false_positive_rate": 0.0,
+    "p50_quantile_loss": 0.0541,
+    "p90_quantile_loss": 0.0732
+  }
+]
