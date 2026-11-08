@@ -4,7 +4,8 @@
  * Includes resilient fallback data matching Page 9 mockup if backend is not yet started.
  */
 
-const API_BASE = "http://localhost:8000/api";
+// Dynamic API base: uses VITE_API_BASE, or relative '/api' on Vercel, or local proxy
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 export async function fetchPredictions() {
   try {

@@ -4,6 +4,14 @@ ModelX 2.0 | Team Nexio | IEEE CIS Student Chapter, IIT
 """
 
 import os
+import sys
+from pathlib import Path
+
+# Ensure root repository directory and backend directory are in sys.path
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -11,7 +19,10 @@ from dotenv import load_dotenv
 # Load environment configuration
 load_dotenv()
 
-from backend.app.api.endpoints import router as api_router
+try:
+    from backend.app.api.endpoints import router as api_router
+except ImportError:
+    from app.api.endpoints import router as api_router
 
 app = FastAPI(
     title="VendorPulse Early-Warning Intelligence API",
